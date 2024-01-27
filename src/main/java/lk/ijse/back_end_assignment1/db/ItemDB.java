@@ -1,6 +1,9 @@
 package lk.ijse.back_end_assignment1.db;
 
 import lk.ijse.back_end_assignment1.dto.ItemDTO;
+import lk.ijse.back_end_assignment1.dto.OrderDetailsDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ItemDB {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderDB.class);
     public String generateItemCode(Connection connection){
         String sql = "SELECT MAX(itemCode) AS last_item_code FROM item;";
 
@@ -119,5 +124,23 @@ public class ItemDB {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public boolean updateItemOrder(OrderDetailsDTO orderDetailsDTO, Connection connection) throws SQLException {
+
+            String updateItemQtyQuery = "UPDATE Item SET qty = qty - ? WHERE itemCode = ?;";
+
+            PreparedStatement updateItemQtyStatement = connection.prepareStatement(updateItemQtyQuery);
+            updateItemQtyStatement.setInt(1, orderDetailsDTO.getQty());
+            updateItemQtyStatement.setString(2, orderDetailsDTO.getItem_id());
+
+            boolean result = updateItemQtyStatement.executeUpdate() != 0;
+            if (result) {
+                logger.info("Item quantity updated successfully for order: {}", orderDetailsDTO.getOrder_id());
+            } else {
+                logger.error("Failed to update item quantity for order: {}", orderDetailsDTO.getOrder_id());
+            }
+            return result;
+
     }
 }
