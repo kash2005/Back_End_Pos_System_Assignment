@@ -132,6 +132,7 @@ public class Item extends HttpServlet {
     }
 
     private void getItem(HttpServletRequest req, HttpServletResponse resp, String code){
+
         var itemDB = new ItemDB();
         ItemDTO itemDTO = itemDB.getItem(connection, code);
         Jsonb jsonb = JsonbBuilder.create();

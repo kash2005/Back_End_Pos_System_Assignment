@@ -49,6 +49,7 @@ public class Customer extends HttpServlet {
 
 
     private void getCustomer(HttpServletRequest req, HttpServletResponse resp, String custId){
+
         var customerDB = new CustomerDB();
         CustomerDTO customerDTO = customerDB.getCustomer(connection, custId);
         Jsonb jsonb = JsonbBuilder.create();
@@ -61,8 +62,10 @@ public class Customer extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             throw new RuntimeException(e);
         }
+
     }
     private void generateCustomerId(HttpServletRequest req, HttpServletResponse resp){
+
         CustomerDB customerDB = new CustomerDB();
         String customerId = customerDB.generateCustomerId(connection);
         Jsonb jsonb = JsonbBuilder.create();
@@ -75,6 +78,7 @@ public class Customer extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             throw new RuntimeException(e);
         }
+
     }
 
     @Override
